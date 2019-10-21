@@ -2,6 +2,7 @@ framework:
     messenger:
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         # failure_transport: failed
+        default_bus: command.bus
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
@@ -12,3 +13,9 @@ framework:
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+        buses:
+            command.bus:
+
+            query.bus:
+
+            event.bus:
