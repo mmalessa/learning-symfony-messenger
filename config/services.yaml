@@ -5,17 +5,20 @@ services:
         autowire: false      # Automatically injects dependencies in your services.
         autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
 
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-
-    App\SymfonyCommand\:
-        resource: '../src/SymfonyCommand'
+    App\UI\Command\:
+        resource: '../src/UI/Command'
         tags: ['console.command']
         bind:
             $commandBus: '@command.bus'
 
     App\CommandHandler\:
         resource: '../src/CommandHandler/*'
+        bind:
+            $eventBus: '@event.bus'
         tags:
-            - { name: messenger.message_handler, bus: command.bus}
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\EventHandler\:
+        resource: '../src/EventHandler/*'
+        tags:
+            - { name: messenger.message_handler, bus: event.bus }

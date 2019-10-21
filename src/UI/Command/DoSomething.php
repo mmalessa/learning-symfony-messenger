@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\SymfonyCommand;
+namespace App\UI\Command;
 
-use App\Command\MyCommand;
+use App\Command\MakePizza;
+use App\Command\MakeKebab;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,6 +25,7 @@ class DoSomething extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         echo "SF Command\n";
-        $this->commandBus->dispatch(new MyCommand());
+        $this->commandBus->dispatch(new MakePizza());
+        $this->commandBus->dispatch(new MakeKebab());
     }
 }
