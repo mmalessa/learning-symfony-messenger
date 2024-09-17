@@ -1,0 +1,10 @@
+doctrine:
+    dbal:
+        connections:
+            application:
+                url: '%env(APP_DATABASE_URL)%'
+
+    orm:
+        entity_managers:
+            application_entity_manager:
+                connection: application

@@ -1,0 +1,11 @@
+services:
+
+    App\Message\:
+        resource: '%kernel.project_dir%/src/Message/'
+        autoconfigure: true
+
+    App\MessageHandler\:
+        resource: '%kernel.project_dir%/src/MessageHandler/'
+        autoconfigure: true
+        bind:
+            $logger: '@monolog.logger.application'

@@ -1,0 +1,6 @@
+services:
+    App\Console\:
+        resource: '%kernel.project_dir%/src/Console/'
+        autoconfigure: true
+        bind:
+            $messageBus: '@app_default_bus'

@@ -1,22 +1,32 @@
 {
     "type": "project",
     "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
-        "php": "^7.1.3",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "symfony/console": "4.3.*",
-        "symfony/dotenv": "4.3.*",
-        "symfony/flex": "^1.3.1",
-        "symfony/framework-bundle": "4.3.*",
-        "symfony/messenger": "4.3.*",
-        "symfony/yaml": "4.3.*"
-    },
-    "require-dev": {
+        "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.2",
+        "koco/messenger-kafka": "^0.18.0",
+        "symfony/amqp-messenger": "7.1.*",
+        "symfony/console": "7.1.*",
+        "symfony/doctrine-messenger": "7.1.*",
+        "symfony/dotenv": "7.1.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "7.1.*",
+        "symfony/messenger": "7.1.*",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/runtime": "7.1.*",
+        "symfony/yaml": "7.1.*"
     },
     "config": {
-        "preferred-install": {
-            "*": "dist"
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
         },
         "sort-packages": true
     },
@@ -31,17 +41,18 @@
         }
     },
     "replace": {
-        "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php56": "*"
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
     },
     "scripts": {
         "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "cache:clear": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
@@ -56,7 +67,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "4.3.*"
+            "require": "7.1.*"
         }
     }
 }

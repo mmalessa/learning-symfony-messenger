@@ -2,23 +2,8 @@ parameters:
 
 services:
     _defaults:
-        autowire: false      # Automatically injects dependencies in your services.
-        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
+        autowire: false
+        autoconfigure: false
 
-    App\UI\Command\:
-        resource: '../src/UI/Command'
-        tags: ['console.command']
-        bind:
-            $commandBus: '@command.bus'
-
-    App\CommandHandler\:
-        resource: '../src/CommandHandler/*'
-        bind:
-            $eventBus: '@event.bus'
-        tags:
-            - { name: messenger.message_handler, bus: command.bus }
-
-    App\EventHandler\:
-        resource: '../src/EventHandler/*'
-        tags:
-            - { name: messenger.message_handler, bus: event.bus }
+imports:
+    - { resource: 'services/*.yaml' }
