@@ -9,6 +9,7 @@ use App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterf
 use App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
 use App\Messenger\Stamp\KafkaMessageKeyStamp;
 use App\Messenger\Stamp\SchemaIdStamp;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\ErrorDetailsStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
@@ -20,11 +21,13 @@ class IntegrationSerializer implements SerializerInterface
         private readonly MessengerStampsSerializerInterface   $messengerStampsSerializer,
         private readonly BodySerializerInterface              $bodySerializer,
         private readonly IntegrationStampsSerializerInterface $integrationStampsSerializer,
+        private readonly LoggerInterface $logger
     ) {
     }
 
     public function encode(Envelope $envelope): array
     {
+        $this->logger->info("*** Encode Envelope ***");
         // SCHEMA ID
         $schemaIdStamp = $envelope->last(SchemaIdStamp::class) ?? null;
         if (null === $schemaIdStamp) {
@@ -67,6 +70,7 @@ class IntegrationSerializer implements SerializerInterface
 
     public function decode(array $encodedEnvelope): Envelope
     {
+        $this->logger->info("*** Decode Envelope ***");
         $body = $encodedEnvelope['body'];
         $headers = $encodedEnvelope['headers'];
         $kafkaMessageKey = $encodedEnvelope['key'] ?? null;

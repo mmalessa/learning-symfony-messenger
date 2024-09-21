@@ -6,7 +6,7 @@ services:
             $bodySerializer: '@App\Messenger\Serializer\Body\BodySerializerInterface'
             $messengerStampsSerializer: '@App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface'
             $integrationStampsSerializer: '@App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface'
-
+            $logger: '@monolog.logger.integration'
 
     App\Messenger\Serializer\Body\BodySerializerInterface:
         alias: App\Messenger\Serializer\Body\JsonMessageBodySerializer
@@ -33,3 +33,11 @@ services:
         arguments:
             $list:
                 'mm.dev.test': 'App\Message\TestMessage'
+
+    App\Messenger\Middleware\TestMiddleware:
+        arguments:
+            $logger: '@monolog.logger.integration'
+
+    App\Messenger\Transport\Amqp\IntegrationAmqpTransportFactory:
+        tags:
+            - { name: 'messenger.transport_factory' }

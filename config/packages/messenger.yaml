@@ -3,6 +3,8 @@ framework:
 
         buses:
             app_default_bus:
+                middleware:
+                    - 'App\Messenger\Middleware\TestMiddleware'
             app_sync_bus:
 
         default_bus: app_default_bus
