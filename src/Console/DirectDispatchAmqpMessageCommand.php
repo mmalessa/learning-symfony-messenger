@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Amqp\Amqp;
+use App\Message\TestMessage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:dispatch-amqp-message', description: 'Dispatch message to AMQP')]
-class DispatchAmqpMessageCommand extends Command
+#[AsCommand(name: 'app:direct-dispatch-amqp-message', description: 'Dispatch message to AMQP')]
+class DirectDispatchAmqpMessageCommand extends Command
 {
     public function __construct(
         private readonly Amqp $amqp
@@ -24,28 +25,18 @@ class DispatchAmqpMessageCommand extends Command
     {
         $output->writeln("Prepare Message");
 
-        $exchange = $this->amqp->createExchange('external_messages');
-        $queue = $this->amqp->createQueue('external_messages');
-        $queue->bind('external_messages', '#');
+        $exchange = $this->amqp->createExchange('app_transport_exchange');
+        $queue = $this->amqp->createQueue('app_transport_queue');
+        $queue->bind('app_transport_exchange', '#');
 
-        $message = json_encode([
-            'correlationId' => 'someProcessId',
-            'userId' => Uuid::uuid7()->toString(),
-            'userName' => 'Zosia',
-            'userAge' => 25,
-            'userAddres' => [
-                'city' => 'Nowhere',
-                'street' => 'Sezamkowa',
-                'number' => '1',
-            ],
-            'timestamp' => (new \DateTimeImmutable())->format(DATE_ATOM),
-        ]);
+        $testMessage = new TestMessage('Random content ' . Uuid::uuid4()->toString());
+        $message = json_encode($testMessage->serialize());
         $headers = [
             'content_type' => 'application/json',
             'headers' => [
-                'schema-id' => 'mm.dev.test',
-                'message-id' => Uuid::uuid7()->toString(),
-                'some-other' => 'something',
+                'x-schema-id' => 'mm.dev.test',
+                'x-message-id' => Uuid::uuid7()->toString(),
+                'x-some-other' => 'something',
             ],
         ];
 

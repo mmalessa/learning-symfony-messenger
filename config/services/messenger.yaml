@@ -1,0 +1,35 @@
+services:
+
+    App\Messenger\Serializer\IntegrationSerializer:
+        arguments:
+            $schemaIdMapper: '@App\Messenger\Mapper\SchemaIdMapperInterface'
+            $bodySerializer: '@App\Messenger\Serializer\Body\BodySerializerInterface'
+            $messengerStampsSerializer: '@App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface'
+            $integrationStampsSerializer: '@App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface'
+
+
+    App\Messenger\Serializer\Body\BodySerializerInterface:
+        alias: App\Messenger\Serializer\Body\JsonMessageBodySerializer
+
+    App\Messenger\Serializer\Body\JsonMessageBodySerializer:
+
+
+    App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface:
+        alias: App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializer
+
+    App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializer:
+
+    App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface:
+        alias: App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializer
+
+    App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializer:
+        arguments:
+            $symfonySerializer: '@serializer'
+
+    App\Messenger\Mapper\SchemaIdMapperInterface:
+        alias: App\Messenger\Mapper\InMemorySchemaIdMapper
+
+    App\Messenger\Mapper\InMemorySchemaIdMapper:
+        arguments:
+            $list:
+                'mm.dev.test': 'App\Message\TestMessage'

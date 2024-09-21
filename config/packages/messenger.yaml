@@ -31,6 +31,7 @@ framework:
 
             app_amqp_transport:
                 dsn: '%env(APP_AMQP_DSN)%'
+                serializer: 'App\Messenger\Serializer\IntegrationSerializer'
                 options:
                     heartbeat: 30
                     confirm_timeout: 5
@@ -43,8 +44,8 @@ framework:
                         type: topic
                     auto_setup: true
                 retry_strategy:
-                    max_retries: 0
-                    delay: 1000
+                    max_retries: 1
+                    delay: 2000
                     multiplier: 1
 
             app_kafka_producer:
