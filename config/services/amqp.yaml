@@ -1,0 +1,4 @@
+services:
+    App\Amqp\Amqp:
+        arguments:
+            $amqpDsn: '%env(APP_AMQP_DSN)%'

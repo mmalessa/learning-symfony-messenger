@@ -4,3 +4,4 @@ services:
         autoconfigure: true
         bind:
             $messageBus: '@app_default_bus'
+            $amqp: '@App\Amqp\Amqp'

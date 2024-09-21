@@ -32,6 +32,7 @@ framework:
             app_amqp_transport:
                 dsn: '%env(APP_AMQP_DSN)%'
                 options:
+                    heartbeat: 30
                     confirm_timeout: 5
                     queues:
                         app_transport_queue:
