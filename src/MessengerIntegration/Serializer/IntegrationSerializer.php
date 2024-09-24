@@ -2,7 +2,7 @@
 
 namespace App\MessengerIntegration\Serializer;
 
-use App\Message\IntegrationMessageInterface;
+use App\OutgoingMessageInterface\IncomingMessageInterface;
 use App\MessengerIntegration\Mapper\SchemaIdMapperInterface;
 use App\MessengerIntegration\Serializer\Body\BodySerializerInterface;
 use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
@@ -37,7 +37,7 @@ class IntegrationSerializer implements SerializerInterface
 
         // MESSAGE BODY
         $message = $envelope->getMessage();
-        if (! ($message instanceof IntegrationMessageInterface)) {
+        if (! ($message instanceof IncomingMessageInterface)) {
             throw new \RuntimeException('Message is not a valid integration message.');
         }
         $body = $this->bodySerializer->serialize($message, $schemaId);

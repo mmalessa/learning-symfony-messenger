@@ -1,0 +1,5 @@
+services:
+    App\Http\ControllerEmulator:
+        arguments:
+            $logger: '@monolog.logger.application'
+            $inputInboxService: '@App\MessengerIntegration\Inbox\InputInboxService'

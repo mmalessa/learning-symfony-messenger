@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Message\TestMessage;
+use App\OutgoingMessageInterface\TestMessage;
 use App\MessengerIntegration\Stamp\KafkaMessageKeyStamp;
 use App\MessengerIntegration\Stamp\MessageIdStamp;
 use App\MessengerIntegration\Stamp\SchemaIdStamp;
@@ -28,9 +28,9 @@ class DispatchMessageCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln("Dispatch");
-//
+
 //        $this->messageBus->dispatch(
-//            new TestMessage('Message for Doctrine'),
+//            new DoSomethingFromExt('Message for Doctrine'),
 //            [
 //                new TransportNamesStamp(['app_doctrine_transport'])
 //            ]
@@ -47,14 +47,14 @@ class DispatchMessageCommand extends Command
         );
 
 //        $this->messageBus->dispatch(
-//            new TestMessage('Message for Kafka'),
+//            new DoSomethingFromExt('Message for Kafka'),
 //            [
 //                new TransportNamesStamp(['app_kafka_producer'])
 //            ]
 //        );
 //
 //        $this->messageBus->dispatch(
-//            new TestMessage('Message for default')
+//            new DoSomethingFromExt('Message for default')
 //        );
 
         return Command::SUCCESS;

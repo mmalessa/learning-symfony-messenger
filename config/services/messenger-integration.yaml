@@ -32,12 +32,25 @@ services:
     App\MessengerIntegration\Mapper\InMemorySchemaIdMapper:
         arguments:
             $list:
-                'mm.dev.test': 'App\Message\TestMessage'
+                'mm.my.do_sth': 'App\Message\DoSomethingFromExt'
+                'mm.ext.do_sth': 'App\Message\DoSomethingToExt'
 
-    App\MessengerIntegration\Middleware\TestMiddleware:
+    App\MessengerIntegration\Middleware\InboxRouterMiddleware:
         arguments:
             $logger: '@monolog.logger.integration'
+            $targetTransport: '@messenger.transport.app_inbox_transport'
+
+    App\MessengerIntegration\Middleware\OutboxRouterMiddleware:
+        arguments:
+            $logger: '@monolog.logger.integration'
+            $targetTransport: '@messenger.transport.app_outbox_transport'
 
     App\MessengerIntegration\Transport\Amqp\IntegrationAmqpTransportFactory:
         tags:
             - { name: 'messenger.transport_factory' }
+
+    App\MessengerIntegration\Inbox\InputInboxService:
+        arguments:
+            $logger: '@monolog.logger.application'
+            $integrationSerializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
+            $messageBus: '@app_default_bus'

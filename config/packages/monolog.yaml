@@ -11,9 +11,12 @@ when@dev:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine", "!console"]
-                level: info
+                level: debug
                 verbosity_levels:
-                    VERBOSITY_NORMAL: info
+                    VERBOSITY_DEBUG: debug
+                    VERBOSITY_VERY_VERBOSE: debug
+                    VERBOSITY_VERBOSE: debug
+                    VERBOSITY_NORMAL: debug
 
 when@test:
     monolog:

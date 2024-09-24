@@ -6,3 +6,4 @@ services:
             $messageBus: '@app_default_bus'
             $amqp: '@App\Amqp\Amqp'
             $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
+            $controllerEmulator: '@App\Http\ControllerEmulator'

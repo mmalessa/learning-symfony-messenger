@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Message\TestMessage;
+use App\OutgoingMessageInterface\TestMessage;
 use App\MessengerIntegration\Serializer\IntegrationSerializer;
 use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Symfony\Component\Console\Attribute\AsCommand;

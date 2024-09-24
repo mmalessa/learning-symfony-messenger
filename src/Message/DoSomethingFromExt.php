@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-class TestMessage implements IntegrationMessageInterface
+readonly class DoSomethingFromExt implements IncomingMessageInterface
 {
     public function __construct(
         public readonly string $messageContent
@@ -24,6 +24,6 @@ class TestMessage implements IntegrationMessageInterface
     }
 
     public static function schemaId(): string{
-        return 'mm.dev.test';
+        return 'mm.my.do_sth';
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Amqp\Amqp;
-use App\Message\TestMessage;
+use App\OutgoingMessageInterface\TestMessage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
