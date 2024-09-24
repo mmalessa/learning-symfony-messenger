@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Messenger\Stamp;
+namespace App\MessengerIntegration\Stamp;
 
 use Symfony\Component\Messenger\Stamp\NonSendableStampInterface;
 

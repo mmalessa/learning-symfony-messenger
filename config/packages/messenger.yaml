@@ -4,7 +4,7 @@ framework:
         buses:
             app_default_bus:
                 middleware:
-                    - 'App\Messenger\Middleware\TestMiddleware'
+                    - 'App\MessengerIntegration\Middleware\TestMiddleware'
             app_sync_bus:
 
         default_bus: app_default_bus
@@ -33,7 +33,7 @@ framework:
 
             app_amqp_transport:
                 dsn: '%env(APP_AMQP_DSN)%'
-                serializer: 'App\Messenger\Serializer\IntegrationSerializer'
+                serializer: 'App\MessengerIntegration\Serializer\IntegrationSerializer'
                 options:
                     heartbeat: 30
                     confirm_timeout: 5

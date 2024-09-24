@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Messenger\Serializer\IntegrationStamps;
+namespace App\MessengerIntegration\Serializer\IntegrationStamps;
 
-use App\Messenger\Stamp\KafkaMessageKeyStamp;
+use App\MessengerIntegration\Stamp\KafkaMessageKeyStamp;
 
 interface IntegrationStampsSerializerInterface
 {

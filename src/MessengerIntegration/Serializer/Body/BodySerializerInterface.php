@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Messenger\Serializer\Body;
+namespace App\MessengerIntegration\Serializer\Body;
 
 use App\Message\IntegrationMessageInterface;
 

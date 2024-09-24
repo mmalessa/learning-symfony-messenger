@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Messenger\Transport\Amqp;
+namespace App\MessengerIntegration\Transport\Amqp;
 
-use App\Messenger\Stamp\MessageIdStamp;
-use App\Messenger\Stamp\SchemaIdStamp;
+use App\MessengerIntegration\Stamp\MessageIdStamp;
+use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpTransport;
 use Symfony\Component\Messenger\Envelope;
 

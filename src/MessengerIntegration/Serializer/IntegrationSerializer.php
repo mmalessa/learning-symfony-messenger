@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Messenger\Serializer;
+namespace App\MessengerIntegration\Serializer;
 
 use App\Message\IntegrationMessageInterface;
-use App\Messenger\Mapper\SchemaIdMapperInterface;
-use App\Messenger\Serializer\Body\BodySerializerInterface;
-use App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
-use App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
-use App\Messenger\Stamp\KafkaMessageKeyStamp;
-use App\Messenger\Stamp\SchemaIdStamp;
+use App\MessengerIntegration\Mapper\SchemaIdMapperInterface;
+use App\MessengerIntegration\Serializer\Body\BodySerializerInterface;
+use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
+use App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
+use App\MessengerIntegration\Stamp\KafkaMessageKeyStamp;
+use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\ErrorDetailsStamp;

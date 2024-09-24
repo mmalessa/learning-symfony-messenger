@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Message\TestMessage;
-use App\Messenger\Stamp\KafkaMessageKeyStamp;
-use App\Messenger\Stamp\MessageIdStamp;
-use App\Messenger\Stamp\SchemaIdStamp;
+use App\MessengerIntegration\Stamp\KafkaMessageKeyStamp;
+use App\MessengerIntegration\Stamp\MessageIdStamp;
+use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

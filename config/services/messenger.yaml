@@ -1,43 +1,43 @@
 services:
 
-    App\Messenger\Serializer\IntegrationSerializer:
+    App\MessengerIntegration\Serializer\IntegrationSerializer:
         arguments:
-            $schemaIdMapper: '@App\Messenger\Mapper\SchemaIdMapperInterface'
-            $bodySerializer: '@App\Messenger\Serializer\Body\BodySerializerInterface'
-            $messengerStampsSerializer: '@App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface'
-            $integrationStampsSerializer: '@App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface'
+            $schemaIdMapper: '@App\MessengerIntegration\Mapper\SchemaIdMapperInterface'
+            $bodySerializer: '@App\MessengerIntegration\Serializer\Body\BodySerializerInterface'
+            $messengerStampsSerializer: '@App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface'
+            $integrationStampsSerializer: '@App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface'
             $logger: '@monolog.logger.integration'
 
-    App\Messenger\Serializer\Body\BodySerializerInterface:
-        alias: App\Messenger\Serializer\Body\JsonMessageBodySerializer
+    App\MessengerIntegration\Serializer\Body\BodySerializerInterface:
+        alias: App\MessengerIntegration\Serializer\Body\JsonMessageBodySerializer
 
-    App\Messenger\Serializer\Body\JsonMessageBodySerializer:
+    App\MessengerIntegration\Serializer\Body\JsonMessageBodySerializer:
 
 
-    App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface:
-        alias: App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializer
+    App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface:
+        alias: App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializer
 
-    App\Messenger\Serializer\IntegrationStamps\IntegrationStampsSerializer:
+    App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializer:
 
-    App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializerInterface:
-        alias: App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializer
+    App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface:
+        alias: App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializer
 
-    App\Messenger\Serializer\MessengerStamps\MessengerStampsSerializer:
+    App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializer:
         arguments:
             $symfonySerializer: '@serializer'
 
-    App\Messenger\Mapper\SchemaIdMapperInterface:
-        alias: App\Messenger\Mapper\InMemorySchemaIdMapper
+    App\MessengerIntegration\Mapper\SchemaIdMapperInterface:
+        alias: App\MessengerIntegration\Mapper\InMemorySchemaIdMapper
 
-    App\Messenger\Mapper\InMemorySchemaIdMapper:
+    App\MessengerIntegration\Mapper\InMemorySchemaIdMapper:
         arguments:
             $list:
                 'mm.dev.test': 'App\Message\TestMessage'
 
-    App\Messenger\Middleware\TestMiddleware:
+    App\MessengerIntegration\Middleware\TestMiddleware:
         arguments:
             $logger: '@monolog.logger.integration'
 
-    App\Messenger\Transport\Amqp\IntegrationAmqpTransportFactory:
+    App\MessengerIntegration\Transport\Amqp\IntegrationAmqpTransportFactory:
         tags:
             - { name: 'messenger.transport_factory' }

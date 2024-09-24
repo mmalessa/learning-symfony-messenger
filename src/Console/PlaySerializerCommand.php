@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Message\TestMessage;
-use App\Messenger\Serializer\IntegrationSerializer;
-use App\Messenger\Stamp\SchemaIdStamp;
+use App\MessengerIntegration\Serializer\IntegrationSerializer;
+use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

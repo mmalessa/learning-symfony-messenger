@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Messenger\Mapper;
+namespace App\MessengerIntegration\Mapper;
 
 interface SchemaIdMapperInterface
 {

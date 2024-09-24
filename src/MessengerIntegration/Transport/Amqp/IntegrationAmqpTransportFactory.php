@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Messenger\Transport\Amqp;
+namespace App\MessengerIntegration\Transport\Amqp;
 
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;

@@ -5,4 +5,4 @@ services:
         bind:
             $messageBus: '@app_default_bus'
             $amqp: '@App\Amqp\Amqp'
-            $serializer: '@App\Messenger\Serializer\IntegrationSerializer'
+            $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'

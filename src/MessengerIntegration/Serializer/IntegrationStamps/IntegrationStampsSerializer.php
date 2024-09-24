@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Messenger\Serializer\IntegrationStamps;
+namespace App\MessengerIntegration\Serializer\IntegrationStamps;
 
-use App\Messenger\Stamp\MessageIdStamp;
-use App\Messenger\Stamp\SchemaIdStamp;
+use App\MessengerIntegration\Stamp\MessageIdStamp;
+use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Symfony\Component\Messenger\Stamp\StampInterface;
 
 class IntegrationStampsSerializer implements IntegrationStampsSerializerInterface

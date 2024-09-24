@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Messenger\Serializer\MessengerStamps;
+namespace App\MessengerIntegration\Serializer\MessengerStamps;
 
 use Symfony\Component\Messenger\Stamp\ErrorDetailsStamp;
 use Symfony\Component\Serializer\Serializer;
