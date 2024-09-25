@@ -35,6 +35,15 @@ services:
                 'mm.my.start_process': 'App\Message\IncomingExternal\StartProcess'
                 'mm.ext.download_data': 'App\Message\OutgoingExternal\DownloadData'
 
+    # TODO - do we need this?
+    App\MessengerIntegration\Inbox\InputInboxService:
+        arguments:
+            $logger: '@monolog.logger.application'
+            $integrationSerializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
+            $messageBus: '@application_bus'
+
+
+    # Middleware
     App\MessengerIntegration\Middleware\InboxRouterMiddleware:
         arguments:
             $logger: '@monolog.logger.integration'
@@ -45,12 +54,21 @@ services:
             $logger: '@monolog.logger.integration'
             $outboxTransport: '@messenger.transport.outbox_transport'
 
-    App\MessengerIntegration\Transport\Amqp\IntegrationAmqpTransportFactory:
+    App\MessengerIntegration\Middleware\OutgoingHttpRouterMiddleware:
+        arguments:
+            $logger: '@monolog.logger.integration'
+            $httpTransport: '@messenger.transport.http_publisher_transport'
+
+    App\MessengerIntegration\Middleware\OutgoingKafkaRouterMiddleware:
+        arguments:
+            $logger: '@monolog.logger.integration'
+            $kafkaTransport: '@messenger.transport.kafka_publisher_transport'
+
+    # Transport factories
+    App\MessengerIntegration\Transport\Http\IntegrationHttpTransportSenderFactory:
         tags:
             - { name: 'messenger.transport_factory' }
 
-    App\MessengerIntegration\Inbox\InputInboxService:
-        arguments:
-            $logger: '@monolog.logger.application'
-            $integrationSerializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
-            $messageBus: '@application_bus'
+    App\MessengerIntegration\Transport\Kafka\IntegrationKafkaSenderTransportFactory:
+        tags:
+            - { name: 'messenger.transport_factory' }

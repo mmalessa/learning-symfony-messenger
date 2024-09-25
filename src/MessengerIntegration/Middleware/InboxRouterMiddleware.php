@@ -42,8 +42,7 @@ class InboxRouterMiddleware implements MiddlewareInterface
 
         $this->logger->debug("Incoming Message for INBOX");
         $envelope = $envelope->withoutStampsOfType(TransportNamesStamp::class)->with(new InboxMessageStamp());
-        $this->inboxTransport->send($envelope);
-        return $envelope;
+        return $this->inboxTransport->send($envelope);
     }
 
     private function hasMessageInboxStamp(Envelope $envelope): bool

@@ -2,9 +2,9 @@
 
 namespace App\Message\OutgoingExternal;
 
-use App\Message\OutgoingMessageInterface;
+use App\Message\OutgoingHttpMessageInterface;
 
-readonly class DownloadData implements OutgoingMessageInterface
+readonly class DownloadData implements OutgoingHttpMessageInterface
 {
     public function __construct(
         public string $messageContent

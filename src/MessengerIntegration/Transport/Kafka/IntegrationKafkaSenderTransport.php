@@ -1,0 +1,42 @@
+<?php
+
+namespace App\MessengerIntegration\Transport\Kafka;
+
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Transport\Receiver\MessageCountAwareInterface;
+use Symfony\Component\Messenger\Transport\SetupableTransportInterface;
+use Symfony\Component\Messenger\Transport\TransportInterface;
+
+
+// TODO
+class IntegrationKafkaSenderTransport implements TransportInterface, SetupableTransportInterface, MessageCountAwareInterface
+{
+    public function setup(): void
+    {
+    }
+
+    public function send(Envelope $envelope): Envelope
+    {
+        $message = $envelope->getMessage();
+        printf("**** Kafka ****\nSending integration Kafka message %s\n**** Kafka ****\n", get_class($message));
+        return $envelope;
+    }
+
+    public function ack(Envelope $envelope): void
+    {
+    }
+
+    public function get(): iterable
+    {
+        return [];
+    }
+
+    public function getMessageCount(): int
+    {
+        return 0;
+    }
+
+    public function reject(Envelope $envelope): void
+    {
+    }
+}

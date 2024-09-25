@@ -10,6 +10,8 @@ framework:
                 middleware:
                     - 'App\MessengerIntegration\Middleware\InboxRouterMiddleware'
                     - 'App\MessengerIntegration\Middleware\OutboxRouterMiddleware'
+                    - 'App\MessengerIntegration\Middleware\OutgoingHttpRouterMiddleware'
+                    - 'App\MessengerIntegration\Middleware\OutgoingKafkaRouterMiddleware'
 
         default_bus: application_bus
 
@@ -44,6 +46,16 @@ framework:
                     auto_setup: true
                 retry_strategy:
                     max_retries: 0
+
+
+            http_publisher_transport:
+                dsn: 'integration-http://'
+                serializer: 'messenger.default_serializer'
+
+            kafka_publisher_transport:
+                dsn: 'integration-kafka://'
+                serializer: 'messenger.default_serializer'
+
 
 #            app_doctrine_transport:
 #                dsn: 'doctrine://application'

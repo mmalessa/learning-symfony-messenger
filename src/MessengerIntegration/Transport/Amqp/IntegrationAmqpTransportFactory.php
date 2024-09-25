@@ -13,7 +13,8 @@ class IntegrationAmqpTransportFactory implements TransportFactoryInterface
 {
     public function createTransport(
         #[\SensitiveParameter] string $dsn,
-        array $options, SerializerInterface $serializer
+        array $options,
+        SerializerInterface $serializer
     ): TransportInterface
     {
         unset($options['transport_name']);

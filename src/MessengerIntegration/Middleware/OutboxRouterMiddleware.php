@@ -41,8 +41,7 @@ class OutboxRouterMiddleware implements MiddlewareInterface
 
         $this->logger->debug("Outgoing Message for Outbox");
         $envelope = $envelope->withoutStampsOfType(TransportNamesStamp::class)->with(new OutboxMessageStamp());
-        $this->outboxTransport->send($envelope);
-        return $envelope;
+        return $this->outboxTransport->send($envelope);
     }
 
     private function hasMessageOutboxStamp(Envelope $envelope): bool
