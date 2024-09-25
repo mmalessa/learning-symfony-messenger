@@ -1,5 +1,5 @@
 services:
-    App\Http\ControllerEmulator:
+    App\Http\FakeController:
         arguments:
             $logger: '@monolog.logger.application'
             $inputInboxService: '@App\MessengerIntegration\Inbox\InputInboxService'

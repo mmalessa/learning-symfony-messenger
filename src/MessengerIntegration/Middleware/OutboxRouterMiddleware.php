@@ -14,8 +14,8 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
 class OutboxRouterMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TransportInterface $targetTransport,
+        private readonly LoggerInterface    $logger,
+        private readonly TransportInterface $outboxTransport,
     ) {
     }
 
@@ -41,7 +41,7 @@ class OutboxRouterMiddleware implements MiddlewareInterface
 
         $this->logger->debug("Outgoing Message for Outbox");
         $envelope = $envelope->withoutStampsOfType(TransportNamesStamp::class)->with(new OutboxMessageStamp());
-        $this->targetTransport->send($envelope);
+        $this->outboxTransport->send($envelope);
         return $envelope;
     }
 

@@ -30,7 +30,7 @@ class DispatchMessageCommand extends Command
         $output->writeln("Dispatch");
 
 //        $this->messageBus->dispatch(
-//            new DoSomethingFromExt('Message for Doctrine'),
+//            new StartProcess('Message for Doctrine'),
 //            [
 //                new TransportNamesStamp(['app_doctrine_transport'])
 //            ]
@@ -47,14 +47,14 @@ class DispatchMessageCommand extends Command
         );
 
 //        $this->messageBus->dispatch(
-//            new DoSomethingFromExt('Message for Kafka'),
+//            new StartProcess('Message for Kafka'),
 //            [
 //                new TransportNamesStamp(['app_kafka_producer'])
 //            ]
 //        );
 //
 //        $this->messageBus->dispatch(
-//            new DoSomethingFromExt('Message for default')
+//            new StartProcess('Message for default')
 //        );
 
         return Command::SUCCESS;

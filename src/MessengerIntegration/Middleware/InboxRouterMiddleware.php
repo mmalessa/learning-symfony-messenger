@@ -10,15 +10,14 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackInterface;
-use Symfony\Component\Messenger\Stamp\ReceivedStamp;
 use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 
 class InboxRouterMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TransportInterface $targetTransport,
+        private readonly LoggerInterface    $logger,
+        private readonly TransportInterface $inboxTransport,
     ) {
     }
 
@@ -43,7 +42,7 @@ class InboxRouterMiddleware implements MiddlewareInterface
 
         $this->logger->debug("Incoming Message for INBOX");
         $envelope = $envelope->withoutStampsOfType(TransportNamesStamp::class)->with(new InboxMessageStamp());
-        $this->targetTransport->send($envelope);
+        $this->inboxTransport->send($envelope);
         return $envelope;
     }
 

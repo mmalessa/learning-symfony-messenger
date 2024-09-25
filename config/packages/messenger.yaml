@@ -2,7 +2,7 @@ framework:
     messenger:
 
         buses:
-            app_default_bus:
+            application_bus:
 #                default_middleware:
 #                    enabled: true
 #                    allow_no_handlers: true
@@ -11,11 +11,11 @@ framework:
                     - 'App\MessengerIntegration\Middleware\InboxRouterMiddleware'
                     - 'App\MessengerIntegration\Middleware\OutboxRouterMiddleware'
 
-        default_bus: app_default_bus
+        default_bus: application_bus
 
         transports:
 
-            app_failed_transport:
+            failed_transport:
                 dsn: 'doctrine://application'
                 serializer: 'messenger.default_serializer'
                 retry_strategy:
@@ -25,7 +25,7 @@ framework:
                     queue_name: 'failed'
                     auto_setup: true
 
-            app_inbox_transport:
+            inbox_transport:
                 dsn: 'doctrine://application'
                 serializer: 'messenger.default_serializer'
                 options:
@@ -35,7 +35,7 @@ framework:
                 retry_strategy:
                     max_retries: 0
 
-            app_outbox_transport:
+            outbox_transport:
                 dsn: 'doctrine://application'
                 serializer: 'messenger.default_serializer'
                 options:

@@ -3,7 +3,7 @@ services:
         resource: '%kernel.project_dir%/src/Console/'
         autoconfigure: true
         bind:
-            $messageBus: '@app_default_bus'
+            $messageBus: '@application_bus'
             $amqp: '@App\Amqp\Amqp'
             $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
-            $controllerEmulator: '@App\Http\ControllerEmulator'
+            $controllerEmulator: '@App\Http\FakeController'

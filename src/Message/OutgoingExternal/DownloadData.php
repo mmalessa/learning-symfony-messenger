@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\OutgoingExternal;
 
-class DoSomethingToExt implements OutgoingMessageInterface
+use App\Message\OutgoingMessageInterface;
+
+readonly class DownloadData implements OutgoingMessageInterface
 {
     public function __construct(
-        public readonly string $messageContent
+        public string $messageContent
     ) {
     }
 
@@ -24,6 +26,6 @@ class DoSomethingToExt implements OutgoingMessageInterface
     }
 
     public static function schemaId(): string{
-        return 'mm.ext.do_sth';
+        return 'mm.ext.download_data';
     }
 }

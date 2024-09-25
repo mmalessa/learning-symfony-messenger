@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\IncomingExternal;
 
-readonly class DoSomethingFromExt implements IncomingMessageInterface
+use App\Message\IncomingMessageInterface;
+
+readonly class StartProcess implements IncomingMessageInterface
 {
     public function __construct(
-        public readonly string $messageContent
+        public string $messageContent
     ) {
     }
 
@@ -24,6 +26,6 @@ readonly class DoSomethingFromExt implements IncomingMessageInterface
     }
 
     public static function schemaId(): string{
-        return 'mm.my.do_sth';
+        return 'mm.my.start_process';
     }
 }

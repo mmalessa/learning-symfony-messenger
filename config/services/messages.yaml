@@ -9,4 +9,4 @@ services:
         autoconfigure: true
         bind:
             $logger: '@monolog.logger.application'
-            $messageBus: '@app_default_bus'
+            $messageBus: '@application_bus'

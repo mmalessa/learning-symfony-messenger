@@ -2,14 +2,14 @@
 
 namespace App\MessageHandler;
 
-use App\Message\DoSomethingFromExt;
-use App\Message\DoSomethingToExt;
+use App\Message\IncomingExternal\StartProcess;
+use App\Message\OutgoingExternal\DownloadData;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsMessageHandler]
-class DoSomethingHandler
+class SomeProcessHandler
 {
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -17,10 +17,10 @@ class DoSomethingHandler
     ) {
     }
 
-    public function __invoke(DoSomethingFromExt $message)
+    public function __invoke(StartProcess $message)
     {
-        $this->logger->debug(sprintf("Handle DoSomethingFromExt with content: %s", $message->messageContent));
-        $command = new DoSomethingToExt('Bring a Christmas tree');
+        $this->logger->debug(sprintf("Handle StartProcess with content: %s", $message->messageContent));
+        $command = new DownloadData('Bring a Christmas tree');
         $this->messageBus->dispatch($command);
     }
 }
