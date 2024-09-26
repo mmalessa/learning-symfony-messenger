@@ -3,6 +3,7 @@
 namespace App\MessengerIntegration\Transport\Http;
 
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Receiver\MessageCountAwareInterface;
 use Symfony\Component\Messenger\Transport\SetupableTransportInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
@@ -19,6 +20,7 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
     {
         $message = $envelope->getMessage();
         printf("**** HTTP ****\nSending integration HTTP message %s\n**** HTTP ****\n", get_class($message));
+//        throw new TransportException('Transport test exception');
         return $envelope;
     }
 

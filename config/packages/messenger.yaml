@@ -15,13 +15,15 @@ framework:
 
         default_bus: application_bus
 
+        failure_transport: failed_transport
+
         transports:
 
             failed_transport:
                 dsn: 'doctrine://application'
                 serializer: 'messenger.default_serializer'
                 retry_strategy:
-                    max_retries: 0
+                    max_retries: 100000
                 options:
                     table_name: 'demo.messenger_messages'
                     queue_name: 'failed'
@@ -45,8 +47,8 @@ framework:
                     queue_name: 'outbox'
                     auto_setup: true
                 retry_strategy:
-                    max_retries: 0
-
+                    max_retries: 1
+                    delay: 2000
 
             http_publisher_transport:
                 dsn: 'integration-http://'

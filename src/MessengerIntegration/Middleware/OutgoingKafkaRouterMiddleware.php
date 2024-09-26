@@ -19,7 +19,7 @@ class OutgoingKafkaRouterMiddleware implements MiddlewareInterface
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         $this->logger->debug(sprintf("*** Outgoing Kafka Router Middleware *** %s", get_class($envelope->getMessage())));
-        print_r(array_keys($envelope->all()));
+//        print_r(array_keys($envelope->all()));
 
         if (!$this->isOutgoingKafkaMessage($envelope)) {
             $this->logger->debug("SKIP Outgoing Kafka Router Middleware");

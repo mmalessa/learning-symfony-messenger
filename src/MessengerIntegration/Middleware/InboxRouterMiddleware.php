@@ -24,7 +24,7 @@ class InboxRouterMiddleware implements MiddlewareInterface
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         $this->logger->debug(sprintf("*** Inbox Router Middleware *** %s", get_class($envelope->getMessage())));
-        print_r(array_keys($envelope->all()));
+//        print_r(array_keys($envelope->all()));
 
         // SKIP
         if (!$this->isIncoming($envelope)) {

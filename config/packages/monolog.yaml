@@ -15,8 +15,8 @@ when@dev:
                 verbosity_levels:
                     VERBOSITY_DEBUG: debug
                     VERBOSITY_VERY_VERBOSE: debug
-                    VERBOSITY_VERBOSE: debug
-                    VERBOSITY_NORMAL: debug
+#                    VERBOSITY_VERBOSE: debug
+#                    VERBOSITY_NORMAL: normal
 
 when@test:
     monolog:

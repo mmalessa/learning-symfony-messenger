@@ -23,7 +23,7 @@ class SomeProcessHandler
         $this->logger->debug(sprintf("Handle StartProcess with content: %s", $message->messageContent));
         $command = new DownloadData('Bring a Christmas tree');
         $this->messageBus->dispatch($command);
-        $event = new DownloadRequested((new \DateTimeImmutable())->format(DATE_ATOM));
-        $this->messageBus->dispatch($event);
+//        $event = new DownloadRequested((new \DateTimeImmutable())->format(DATE_ATOM));
+//        $this->messageBus->dispatch($event);
     }
 }
