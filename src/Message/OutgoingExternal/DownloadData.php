@@ -3,7 +3,9 @@
 namespace App\Message\OutgoingExternal;
 
 use App\Message\OutgoingHttpMessageInterface;
+use App\MessengerIntegration\Message\AsIntegrationMessage;
 
+#[AsIntegrationMessage(schemaId: 'mm.ext.download_data')]
 readonly class DownloadData implements OutgoingHttpMessageInterface
 {
     public function __construct(
@@ -23,9 +25,5 @@ readonly class DownloadData implements OutgoingHttpMessageInterface
         return new self(
             $data['messageContent']
         );
-    }
-
-    public static function schemaId(): string{
-        return 'mm.ext.download_data';
     }
 }

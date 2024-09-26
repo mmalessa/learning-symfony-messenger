@@ -2,13 +2,12 @@
 
 namespace App\MessengerIntegration\Serializer;
 
-use App\OutgoingMessageInterface\IncomingMessageInterface;
-use App\MessengerIntegration\Mapper\SchemaIdMapperInterface;
+use App\Message\IncomingMessageInterface;
+use App\MessengerIntegration\Message\IntegrationMessageAttributeStorage;
 use App\MessengerIntegration\Serializer\Body\BodySerializerInterface;
 use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
 use App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
 use App\MessengerIntegration\Stamp\KafkaMessageKeyStamp;
-use App\MessengerIntegration\Stamp\SchemaIdStamp;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\ErrorDetailsStamp;
@@ -17,26 +16,29 @@ use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 class IntegrationSerializer implements SerializerInterface
 {
     public function __construct(
-        private readonly SchemaIdMapperInterface              $schemaIdMapper,
         private readonly MessengerStampsSerializerInterface   $messengerStampsSerializer,
         private readonly BodySerializerInterface              $bodySerializer,
         private readonly IntegrationStampsSerializerInterface $integrationStampsSerializer,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly IntegrationMessageAttributeStorage $integrationMessageAttributeStorage,
     ) {
     }
 
     public function encode(Envelope $envelope): array
     {
         $this->logger->info("*** Encode Envelope ***");
+        $message = $envelope->getMessage();
+
         // SCHEMA ID
-        $schemaIdStamp = $envelope->last(SchemaIdStamp::class) ?? null;
-        if (null === $schemaIdStamp) {
-            throw new \RuntimeException('SchemaIdStamp cannot be null');
-        }
-        $schemaId = $schemaIdStamp->schemaId;
+//        $schemaIdStamp = $envelope->last(SchemaIdStamp::class) ?? null;
+//        if (null === $schemaIdStamp) {
+//            throw new \RuntimeException('SchemaIdStamp cannot be null');
+//        }
+//        $schemaId = $schemaIdStamp->schemaId;
+
+        $schemaId = $this->integrationMessageAttributeStorage->getByClassName(get_class($message))->schemaId;
 
         // MESSAGE BODY
-        $message = $envelope->getMessage();
         if (! ($message instanceof IncomingMessageInterface)) {
             throw new \RuntimeException('Message is not a valid integration message.');
         }
@@ -80,7 +82,7 @@ class IntegrationSerializer implements SerializerInterface
         if (null === $schemaId) {
             throw new \RuntimeException('SchemaId cannot be null');
         }
-        $className = $this->schemaIdMapper->getClassNameBySchemaId($schemaId);
+        $className = $this->integrationMessageAttributeStorage->getBySchemaId($schemaId)->className;
 
         // MESSAGE BODY
         $message = $this->bodySerializer->deserialize($body, $className);

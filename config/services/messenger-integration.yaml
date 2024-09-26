@@ -2,11 +2,11 @@ services:
 
     App\MessengerIntegration\Serializer\IntegrationSerializer:
         arguments:
-            $schemaIdMapper: '@App\MessengerIntegration\Mapper\SchemaIdMapperInterface'
             $bodySerializer: '@App\MessengerIntegration\Serializer\Body\BodySerializerInterface'
             $messengerStampsSerializer: '@App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface'
             $integrationStampsSerializer: '@App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface'
             $logger: '@monolog.logger.integration'
+            $integrationMessageAttributeStorage: '@App\MessengerIntegration\Message\IntegrationMessageAttributeStorage'
 
     App\MessengerIntegration\Serializer\Body\BodySerializerInterface:
         alias: App\MessengerIntegration\Serializer\Body\JsonMessageBodySerializer
@@ -26,15 +26,6 @@ services:
         arguments:
             $symfonySerializer: '@serializer'
 
-    App\MessengerIntegration\Mapper\SchemaIdMapperInterface:
-        alias: App\MessengerIntegration\Mapper\InMemorySchemaIdMapper
-
-    App\MessengerIntegration\Mapper\InMemorySchemaIdMapper:
-        arguments:
-            $list:
-                'mm.my.start_process': 'App\Message\IncomingExternal\StartProcess'
-                'mm.ext.download_data': 'App\Message\OutgoingExternal\DownloadData'
-
     # TODO - do we need this?
     App\MessengerIntegration\Inbox\InputInboxService:
         arguments:
@@ -42,6 +33,10 @@ services:
             $integrationSerializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
             $messageBus: '@application_bus'
 
+    # Message magic
+    App\MessengerIntegration\Message\IntegrationMessageAttributeStorage:
+        tags:
+            - { name: 'messenger.integration.storage' }
 
     # Middleware
     App\MessengerIntegration\Middleware\InboxRouterMiddleware:

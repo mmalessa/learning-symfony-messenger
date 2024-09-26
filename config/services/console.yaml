@@ -5,3 +5,4 @@ services:
         bind:
             $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
             $controllerEmulator: '@App\Http\FakeController'
+            $messageAttributeStorage: '@App\MessengerIntegration\Message\IntegrationMessageAttributeStorage'

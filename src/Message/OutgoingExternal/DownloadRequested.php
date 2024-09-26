@@ -3,7 +3,9 @@
 namespace App\Message\OutgoingExternal;
 
 use App\Message\OutgoingKafkaMessageInterface;
+use App\MessengerIntegration\Message\AsIntegrationMessage;
 
+#[AsIntegrationMessage(schemaId: 'mm.my.download_requested')]
 class DownloadRequested implements OutgoingKafkaMessageInterface
 {
     public function __construct(
@@ -23,10 +25,5 @@ class DownloadRequested implements OutgoingKafkaMessageInterface
         return new self(
             $data['stamp'],
         );
-    }
-
-    public static function schemaId(): string
-    {
-        return 'mm.my.download_requested';
     }
 }
