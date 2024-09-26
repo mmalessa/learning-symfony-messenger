@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MessengerIntegration\Message;
 
-class IntegrationMessageAttributeStorage
+class IntegrationMessageAttributeStorage implements IntegrationMessageAttributeStorageInterface
 {
     private array $classes = [];
     private array $ids = [];
     public function register(string $className, array $attributes): void
     {
+        $attributes['className'] = $className; // force rewrite
         $attribute = AsIntegrationMessage::create($attributes);
-        $attribute->className = $className;
         $this->classes[$attribute->className] = $attribute;
         $this->ids[$attribute->schemaId] = $attribute;
     }

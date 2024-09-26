@@ -3,7 +3,9 @@
 namespace App\MessengerIntegration\Serializer;
 
 use App\Message\IncomingMessageInterface;
-use App\MessengerIntegration\Message\IntegrationMessageAttributeStorage;
+use App\Message\IntegrationMessageInterface;
+use App\Message\OutgoingMessageInterface;
+use App\MessengerIntegration\Message\IntegrationMessageAttributeStorageInterface;
 use App\MessengerIntegration\Serializer\Body\BodySerializerInterface;
 use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
 use App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
@@ -20,7 +22,7 @@ class IntegrationSerializer implements SerializerInterface
         private readonly BodySerializerInterface              $bodySerializer,
         private readonly IntegrationStampsSerializerInterface $integrationStampsSerializer,
         private readonly LoggerInterface $logger,
-        private readonly IntegrationMessageAttributeStorage $integrationMessageAttributeStorage,
+        private readonly IntegrationMessageAttributeStorageInterface $integrationMessageAttributeStorage,
     ) {
     }
 
@@ -39,7 +41,7 @@ class IntegrationSerializer implements SerializerInterface
         $schemaId = $this->integrationMessageAttributeStorage->getByClassName(get_class($message))->schemaId;
 
         // MESSAGE BODY
-        if (! ($message instanceof IncomingMessageInterface)) {
+        if (! ($message instanceof IntegrationMessageInterface)) {
             throw new \RuntimeException('Message is not a valid integration message.');
         }
         $body = $this->bodySerializer->serialize($message, $schemaId);

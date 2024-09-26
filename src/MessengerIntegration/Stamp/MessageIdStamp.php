@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MessengerIntegration\Stamp;
 
-class MessageIdStamp implements IntegrationStampInterface
+use Symfony\Component\Messenger\Stamp\StampInterface;
+
+class MessageIdStamp implements StampInterface
 {
     public function __construct(
         public readonly string $messageId
