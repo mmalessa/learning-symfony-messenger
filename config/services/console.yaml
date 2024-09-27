@@ -3,6 +3,5 @@ services:
         resource: '%kernel.project_dir%/src/Console/'
         autoconfigure: true
         bind:
-            $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
             $controllerEmulator: '@App\Http\FakeController'
-            $messageAttributeStorage: '@App\MessengerIntegration\Message\IntegrationMessageAttributeStorage'
+            $schemaIdMapper: '@App\MessengerIntegration\Message\SchemaIdMapperInterface'

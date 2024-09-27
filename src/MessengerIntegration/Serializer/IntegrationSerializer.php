@@ -5,7 +5,7 @@ namespace App\MessengerIntegration\Serializer;
 use App\Message\IncomingMessageInterface;
 use App\Message\IntegrationMessageInterface;
 use App\Message\OutgoingMessageInterface;
-use App\MessengerIntegration\Message\IntegrationMessageAttributeStorageInterface;
+use App\MessengerIntegration\Message\SchemaIdMapperInterface;
 use App\MessengerIntegration\Serializer\Body\BodySerializerInterface;
 use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
 use App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
@@ -21,8 +21,8 @@ class IntegrationSerializer implements SerializerInterface
         private readonly MessengerStampsSerializerInterface   $messengerStampsSerializer,
         private readonly BodySerializerInterface              $bodySerializer,
         private readonly IntegrationStampsSerializerInterface $integrationStampsSerializer,
-        private readonly LoggerInterface $logger,
-        private readonly IntegrationMessageAttributeStorageInterface $integrationMessageAttributeStorage,
+        private readonly LoggerInterface                      $logger,
+        private readonly SchemaIdMapperInterface              $schemaIdMapper,
     ) {
     }
 
@@ -31,14 +31,7 @@ class IntegrationSerializer implements SerializerInterface
         $this->logger->info("*** Encode Envelope ***");
         $message = $envelope->getMessage();
 
-        // SCHEMA ID
-//        $schemaIdStamp = $envelope->last(SchemaIdStamp::class) ?? null;
-//        if (null === $schemaIdStamp) {
-//            throw new \RuntimeException('SchemaIdStamp cannot be null');
-//        }
-//        $schemaId = $schemaIdStamp->schemaId;
-
-        $schemaId = $this->integrationMessageAttributeStorage->getByClassName(get_class($message))->schemaId;
+        $schemaId = $this->schemaIdMapper->getSchemaIdByClassName(get_class($message));
 
         // MESSAGE BODY
         if (! ($message instanceof IntegrationMessageInterface)) {
@@ -84,7 +77,7 @@ class IntegrationSerializer implements SerializerInterface
         if (null === $schemaId) {
             throw new \RuntimeException('SchemaId cannot be null');
         }
-        $className = $this->integrationMessageAttributeStorage->getBySchemaId($schemaId)->className;
+        $className = $this->schemaIdMapper->getClassNameBySchemaId($schemaId);
 
         // MESSAGE BODY
         $message = $this->bodySerializer->deserialize($body, $className);

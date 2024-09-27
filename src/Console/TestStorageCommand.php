@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\MessengerIntegration\Message\IntegrationMessageAttributeStorageInterface;
+use App\MessengerIntegration\Message\SchemaIdMapperInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TestStorageCommand extends Command
 {
     public function __construct(
-        private readonly IntegrationMessageAttributeStorageInterface $messageAttributeStorage,
+        private readonly SchemaIdMapperInterface $schemaIdMapper,
     )
     {
         parent::__construct();
@@ -22,7 +22,7 @@ class TestStorageCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $content = $this->messageAttributeStorage->getDebug();
+        $content = $this->schemaIdMapper->getDebug();
         print_r($content);
         return Command::SUCCESS;
     }

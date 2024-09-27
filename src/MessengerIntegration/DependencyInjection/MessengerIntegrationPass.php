@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\MessengerIntegration\DependencyInjection;
 
 use App\MessengerIntegration\Message\AsIntegrationMessage;
-use App\MessengerIntegration\Message\IntegrationMessageAttributeStorage;
+use App\MessengerIntegration\Message\SchemaIdMapper;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,7 +27,8 @@ class MessengerIntegrationPass implements CompilerPassInterface
         $taggedServices = $container->findTaggedServiceIds('messenger.integration.message');
         foreach ($taggedServices as $className => $tagAttributes) {
             $attributes = $this->getAttributesByClassName($className);
-            $storage->addMethodCall('register', [$className, $attributes]);
+            $schemaId = $attributes['schemaId'];
+            $storage->addMethodCall('register', [$className, $schemaId]);
         }
     }
     private function getAttributesByClassName(string $className): array

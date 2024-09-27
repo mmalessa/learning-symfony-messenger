@@ -6,7 +6,7 @@ services:
             $messengerStampsSerializer: '@App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface'
             $integrationStampsSerializer: '@App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface'
             $logger: '@monolog.logger.integration'
-            $integrationMessageAttributeStorage: '@App\MessengerIntegration\Message\IntegrationMessageAttributeStorage'
+            $schemaIdMapper: '@App\MessengerIntegration\Message\SchemaIdMapperInterface'
 
     App\MessengerIntegration\Serializer\Body\BodySerializerInterface:
         alias: App\MessengerIntegration\Serializer\Body\JsonMessageBodySerializer
@@ -34,7 +34,10 @@ services:
             $messageBus: '@application_bus'
 
     # Message magic
-    App\MessengerIntegration\Message\IntegrationMessageAttributeStorage:
+    App\MessengerIntegration\Message\SchemaIdMapperInterface:
+        alias: App\MessengerIntegration\Message\SchemaIdMapper
+
+    App\MessengerIntegration\Message\SchemaIdMapper:
         tags:
             - { name: 'messenger.integration.storage' }
 
@@ -62,7 +65,7 @@ services:
     # Transport factories
     App\MessengerIntegration\Transport\Http\IntegrationHttpTransportSenderFactory:
         arguments:
-            $integrationMessageAttributeStorage: '@App\MessengerIntegration\Message\IntegrationMessageAttributeStorage'
+            $schemaIdMapper: '@App\MessengerIntegration\Message\SchemaIdMapperInterface'
             $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
             $logger: '@monolog.logger.application'
             $externalSystemEndpointsPrefixMap: # TODO - do it better

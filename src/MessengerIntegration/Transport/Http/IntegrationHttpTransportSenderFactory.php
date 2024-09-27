@@ -2,7 +2,7 @@
 
 namespace App\MessengerIntegration\Transport\Http;
 
-use App\MessengerIntegration\Message\IntegrationMessageAttributeStorageInterface;
+use App\MessengerIntegration\Message\SchemaIdMapperInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
@@ -11,10 +11,10 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
 class IntegrationHttpTransportSenderFactory
 {
     public function __construct(
-        private readonly IntegrationMessageAttributeStorageInterface $integrationMessageAttributeStorage,
-        private readonly SerializerInterface $serializer,
-        private readonly LoggerInterface $logger,
-        private readonly array $externalSystemEndpointsPrefixMap,
+        private readonly SchemaIdMapperInterface $schemaIdMapper,
+        private readonly SerializerInterface     $serializer,
+        private readonly LoggerInterface         $logger,
+        private readonly array                   $externalSystemEndpointsPrefixMap,
     ) {
     }
 
@@ -27,7 +27,7 @@ class IntegrationHttpTransportSenderFactory
         unset($options['transport_name']);
 
         return new IntegrationHttpSenderTransport(
-            $this->integrationMessageAttributeStorage,
+            $this->schemaIdMapper,
             $this->serializer,
             $this->logger,
             $this->externalSystemEndpointsPrefixMap,

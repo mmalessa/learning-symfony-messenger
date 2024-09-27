@@ -7,17 +7,19 @@ namespace App\MessengerIntegration\Message;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-readonly class AsIntegrationMessage
+readonly class AsHttpOutgoingMessage
 {
     public function __construct(
-        public string $schemaId,
+        public string $endpointName,
+        public string $endpointPath,
     ) {
     }
 
     public static function create(array $attributes): self
     {
         return new self(
-            $attributes['schemaId'],
+            $attributes['endpointPath'],
+            $attributes['endpointName']
         );
     }
 }

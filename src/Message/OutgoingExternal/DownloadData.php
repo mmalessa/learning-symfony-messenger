@@ -5,7 +5,7 @@ namespace App\Message\OutgoingExternal;
 use App\Message\OutgoingHttpMessageInterface;
 use App\MessengerIntegration\Message\AsIntegrationMessage;
 
-#[AsIntegrationMessage(schemaId: 'mm.ext.download_data', endpointPath: '/api/download_data', endpointName: 'some_system')]
+#[AsIntegrationMessage(schemaId: 'mm.ext.download_data')]
 readonly class DownloadData implements OutgoingHttpMessageInterface
 {
     public function __construct(

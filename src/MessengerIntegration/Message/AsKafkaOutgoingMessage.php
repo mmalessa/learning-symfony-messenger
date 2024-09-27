@@ -7,17 +7,17 @@ namespace App\MessengerIntegration\Message;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-readonly class AsIntegrationMessage
+readonly class AsKafkaOutgoingMessage
 {
     public function __construct(
-        public string $schemaId,
+        public string $topicName,
     ) {
     }
 
     public static function create(array $attributes): self
     {
         return new self(
-            $attributes['schemaId'],
+            $attributes['topicName'],
         );
     }
 }

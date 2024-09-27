@@ -3,7 +3,7 @@
 namespace App\MessengerIntegration\Transport\Http;
 
 use App\Message\IntegrationMessageInterface;
-use App\MessengerIntegration\Message\IntegrationMessageAttributeStorageInterface;
+use App\MessengerIntegration\Message\SchemaIdMapperInterface;
 use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
 use App\MessengerIntegration\Stamp\MessageIdStamp;
 use App\MessengerIntegration\Stamp\SchemaIdStamp;
@@ -20,10 +20,10 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
 class IntegrationHttpSenderTransport implements TransportInterface, SetupableTransportInterface, MessageCountAwareInterface
 {
     public function __construct(
-        private IntegrationMessageAttributeStorageInterface $integrationMessageAttributeStorage,
-        private SerializerInterface $serializer,
-        private LoggerInterface $logger,
-        private array $externalSystemEndpointsPrefixMap,
+        private SchemaIdMapperInterface $integrationMessageAttributeStorage,
+        private SerializerInterface     $serializer,
+        private LoggerInterface         $logger,
+        private array                   $externalSystemEndpointsPrefixMap,
     ) {
     }
 
@@ -37,10 +37,11 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
         $message = $envelope->getMessage();
         $messageClassName = get_class($message);
         $messageId = $envelope->last(MessageIdStamp::class)?->messageId;
-        $messageAttributes = $this->integrationMessageAttributeStorage->getByClassName($messageClassName);
-        $schemaId = $messageAttributes->schemaId;
-        $endpointName = $messageAttributes->endpointName ?? null;
-        $endpointPath = $messageAttributes->endpointPath ?? null;
+        $schemaId = $this->integrationMessageAttributeStorage->getSchemaIdByClassName($messageClassName);
+
+        // TODO - move to new service
+        $endpointName = null;
+        $endpointPath = null;
         $endpointPrefix = $this->externalSystemEndpointsPrefixMap[$endpointName] ?? null;
         $endpointUri = sprintf(
             "%s/%s",
@@ -49,7 +50,8 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
         );
 
         $encodedEnvelope = $this->serializer->encode($envelope);
-        // TODO - is it ok? vs ->encode($envelope->with(SchemaIdStamp($schmaId))
+
+        // TODO - move it to new middleware
         $encodedEnvelope['headers'][IntegrationStampsSerializerInterface::SCHEMA_ID_KEY] = $schemaId;
 
         $this->logger->debug(
