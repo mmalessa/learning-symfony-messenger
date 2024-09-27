@@ -3,9 +3,11 @@
 namespace App\Message\OutgoingExternal;
 
 use App\Message\OutgoingHttpMessageInterface;
-use App\MessengerIntegration\Message\AsIntegrationMessage;
+use App\MessengerIntegration\Message\Attribute\AsHttpOutgoingMessage;
+use App\MessengerIntegration\Message\Attribute\AsIntegrationMessage;
 
 #[AsIntegrationMessage(schemaId: 'mm.ext.download_data')]
+#[AsHttpOutgoingMessage(endpointName: 'some_system', endpointPath: '/api/v2/download_data')]
 readonly class DownloadData implements OutgoingHttpMessageInterface
 {
     public function __construct(

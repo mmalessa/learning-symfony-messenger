@@ -3,7 +3,7 @@
 namespace App\Message\OutgoingExternal;
 
 use App\Message\OutgoingKafkaMessageInterface;
-use App\MessengerIntegration\Message\AsIntegrationMessage;
+use App\MessengerIntegration\Message\Attribute\AsIntegrationMessage;
 
 #[AsIntegrationMessage(schemaId: 'mm.my.download_requested')]
 class DownloadRequested implements OutgoingKafkaMessageInterface

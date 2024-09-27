@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\MessengerIntegration\Message;
+namespace App\MessengerIntegration\Message\Attribute;
 
 use Attribute;
 

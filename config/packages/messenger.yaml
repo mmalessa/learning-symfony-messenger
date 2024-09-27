@@ -3,11 +3,8 @@ framework:
 
         buses:
             application_bus:
-#                default_middleware:
-#                    enabled: true
-#                    allow_no_handlers: true
-#                    allow_no_senders: false
                 middleware:
+                    - 'App\MessengerIntegration\Middleware\AddSchemaIdMiddleware'
                     - 'App\MessengerIntegration\Middleware\InboxRouterMiddleware'
                     - 'App\MessengerIntegration\Middleware\OutboxRouterMiddleware'
                     - 'App\MessengerIntegration\Middleware\OutgoingHttpRouterMiddleware'

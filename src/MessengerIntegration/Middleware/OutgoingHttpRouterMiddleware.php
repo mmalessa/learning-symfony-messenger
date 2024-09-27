@@ -2,7 +2,8 @@
 
 namespace App\MessengerIntegration\Middleware;
 
-use App\Message\OutgoingHttpMessageInterface;
+use App\MessengerIntegration\Message\HttpMessageMapperInterface;
+use App\MessengerIntegration\Stamp\TargetUrlStamp;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
@@ -14,27 +15,21 @@ class OutgoingHttpRouterMiddleware implements MiddlewareInterface
     public function __construct(
         private readonly LoggerInterface    $logger,
         private readonly TransportInterface $httpTransport,
+        private readonly HttpMessageMapperInterface $httpMessageMapper,
     ) {
     }
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        $this->logger->debug(sprintf("*** Outgoing HTTP Router Middleware *** %s", get_class($envelope->getMessage())));
-//        print_r(array_keys($envelope->all()));
+        $messageClassName = get_class($envelope->getMessage());
+        $targetUrl = $this->httpMessageMapper->getUrlByClassName($messageClassName);
 
-        if (!$this->isOutgoingHttpMessage($envelope)) {
-            $this->logger->debug("SKIP Outgoing HTTP Router Middleware");
+        $this->logger->debug("OutgointHttpRouter", ['targetUrl' => $targetUrl]);
+
+        if (null === $targetUrl) {
             return $stack->next()->handle($envelope, $stack);
         }
         $this->logger->debug("PROCESS Outgoing HTTP Router Middleware");
-        return $this->httpTransport->send($envelope);
-    }
 
-    private function isOutgoingHttpMessage(Envelope $envelope): bool
-    {
-        $message = $envelope->getMessage();
-        if ($message instanceof OutgoingHttpMessageInterface) {
-            return true;
-        }
-        return false;
+        return $this->httpTransport->send($envelope->with(new TargetUrlStamp($targetUrl)));
     }
 }

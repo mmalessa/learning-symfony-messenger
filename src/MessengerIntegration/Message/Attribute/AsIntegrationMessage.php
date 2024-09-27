@@ -2,24 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\MessengerIntegration\Message;
+namespace App\MessengerIntegration\Message\Attribute;
 
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-readonly class AsHttpOutgoingMessage
+readonly class AsIntegrationMessage
 {
     public function __construct(
-        public string $endpointName,
-        public string $endpointPath,
+        public string $schemaId,
     ) {
     }
 
     public static function create(array $attributes): self
     {
         return new self(
-            $attributes['endpointPath'],
-            $attributes['endpointName']
+            $attributes['schemaId'],
         );
     }
 }
