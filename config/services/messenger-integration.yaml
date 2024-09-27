@@ -47,7 +47,7 @@ services:
     App\MessengerIntegration\Message\HttpMessageMapper:
         arguments:
             $prefixMap: # TODO - do it better
-                'some_system': 'http://somesystem.local'
+                'some_system': 'http://go_dummy_http_app'
                 'some_other': 'http://someother.local'
         tags:
             - { name: 'messenger.integration.http_message_mapper' }
@@ -85,6 +85,7 @@ services:
             $schemaIdMapper: '@App\MessengerIntegration\Message\SchemaIdMapperInterface'
             $httpMessageMapper: '@App\MessengerIntegration\Message\HttpMessageMapperInterface'
             $serializer: '@App\MessengerIntegration\Serializer\IntegrationSerializer'
+            $httpClientFactory: '@App\MessengerIntegration\Transport\Http\HttpClientFactory'
             $logger: '@monolog.logger.application'
         tags:
             - { name: 'messenger.transport_factory' }
@@ -92,3 +93,6 @@ services:
     App\MessengerIntegration\Transport\Kafka\IntegrationKafkaSenderTransportFactory:
         tags:
             - { name: 'messenger.transport_factory' }
+
+    # Other
+    App\MessengerIntegration\Transport\Http\HttpClientFactory:

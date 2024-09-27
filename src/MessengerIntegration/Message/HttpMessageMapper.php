@@ -31,4 +31,9 @@ class HttpMessageMapper implements HttpMessageMapperInterface
 
         return sprintf("%s/%s", rtrim($prefix, '/'), ltrim($endpointPath, '/'));
     }
+
+    public function getMethodByClassName(string $className): ?string
+    {
+        return $this->messages[$className]['method'] ?? null;
+    }
 }

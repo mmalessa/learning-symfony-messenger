@@ -5,6 +5,7 @@ namespace App\MessengerIntegration\Transport\Http;
 use App\MessengerIntegration\Message\HttpMessageMapperInterface;
 use App\MessengerIntegration\Message\SchemaIdMapperInterface;
 use App\MessengerIntegration\Stamp\MessageIdStamp;
+use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\TransportException;
@@ -21,6 +22,7 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
         private SerializerInterface     $serializer,
         private SchemaIdMapperInterface $integrationMessageAttributeStorage,
         private HttpMessageMapperInterface $httpMessageMapper,
+        private HttpClientFactory $httpClientFactory,
         private LoggerInterface         $logger,
     ) {
     }
@@ -38,6 +40,7 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
         $schemaId = $this->integrationMessageAttributeStorage->getSchemaIdByClassName($messageClassName);
 
         $endpointUrl = $this->httpMessageMapper->getUrlByClassName($messageClassName);
+        $requestMethod = $this->httpMessageMapper->getMethodByClassName($messageClassName);
 
         $encodedEnvelope = $this->serializer->encode($envelope);
 
@@ -48,14 +51,24 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
                 'messageId' => $messageId,
                 'className' => $messageClassName,
                 'endpointUrl' => $endpointUrl,
+                'requestMethod' => $requestMethod,
                 'body' => $encodedEnvelope['body'],
                 'headers' => json_encode($encodedEnvelope['headers'], JSON_THROW_ON_ERROR),
             ]
         );
 
-        //TODO - add real API request
+        $client = $this->httpClientFactory->create([]);
+        $requestOptions = []; // TODO
+        $response = $client->request($requestMethod, $endpointUrl, $requestOptions);
 
-//        throw new TransportException('Transport test exception');
+        $responseStatusCode = $response->getStatusCode();
+        if (($responseStatusCode < 200) || ($responseStatusCode > 299)) {
+            throw new TransportException(sprintf("Error response, CODE: %d", $responseStatusCode));
+        }
+
+        $debugBody = $response->getBody()->getContents();
+        $this->logger->debug("Response OK", ['statusCode' => $responseStatusCode, 'body' => $debugBody]);
+
         return $envelope;
     }
 

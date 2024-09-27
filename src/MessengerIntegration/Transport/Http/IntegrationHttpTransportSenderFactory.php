@@ -11,10 +11,11 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
 class IntegrationHttpTransportSenderFactory
 {
     public function __construct(
-        private readonly SchemaIdMapperInterface $schemaIdMapper,
+        private readonly SchemaIdMapperInterface    $schemaIdMapper,
         private readonly HttpMessageMapperInterface $httpMessageMapper,
-        private readonly SerializerInterface     $serializer,
-        private readonly LoggerInterface         $logger,
+        private readonly SerializerInterface        $serializer,
+        private readonly HttpClientFactory          $httpClientFactory,
+        private readonly LoggerInterface            $logger,
     ) {
     }
 
@@ -30,6 +31,7 @@ class IntegrationHttpTransportSenderFactory
             $this->serializer,
             $this->schemaIdMapper,
             $this->httpMessageMapper,
+            $this->httpClientFactory,
             $this->logger,
         );
     }

@@ -12,6 +12,7 @@ readonly class AsHttpOutgoingMessage
     public function __construct(
         public string $endpointName,
         public string $endpointPath,
+        public string $method,
     ) {
     }
 
@@ -20,6 +21,7 @@ readonly class AsHttpOutgoingMessage
         return new self(
             $attributes['endpointName'],
             $attributes['endpointPath'],
+            $attributes['method']
         );
     }
 }
