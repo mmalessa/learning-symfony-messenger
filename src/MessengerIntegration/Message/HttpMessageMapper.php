@@ -36,4 +36,9 @@ class HttpMessageMapper implements HttpMessageMapperInterface
     {
         return $this->messages[$className]['method'] ?? null;
     }
+
+    public function getEndpointNameByClassName(string $className): ?string
+    {
+        return $this->messages[$className]['endpointName'] ?? null;
+    }
 }

@@ -41,6 +41,7 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
 
         $endpointUrl = $this->httpMessageMapper->getUrlByClassName($messageClassName);
         $requestMethod = $this->httpMessageMapper->getMethodByClassName($messageClassName);
+        $endpointName = $this->httpMessageMapper->getEndpointNameByClassName($messageClassName);
 
         $encodedEnvelope = $this->serializer->encode($envelope);
 
@@ -51,6 +52,7 @@ class IntegrationHttpSenderTransport implements TransportInterface, SetupableTra
                 'messageId' => $messageId,
                 'className' => $messageClassName,
                 'endpointUrl' => $endpointUrl,
+                'endpointName' => $endpointName,
                 'requestMethod' => $requestMethod,
                 'body' => $encodedEnvelope['body'],
                 'headers' => json_encode($encodedEnvelope['headers'], JSON_THROW_ON_ERROR),
