@@ -10,14 +10,11 @@ use Attribute;
 readonly class AsKafkaOutgoingMessage
 {
     public function __construct(
-        public string $topicName,
     ) {
     }
 
-    public static function create(array $attributes): self
+    public static function create(): self
     {
-        return new self(
-            $attributes['topicName'],
-        );
+        return new self();
     }
 }

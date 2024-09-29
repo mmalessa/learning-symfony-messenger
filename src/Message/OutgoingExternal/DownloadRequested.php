@@ -2,11 +2,13 @@
 
 namespace App\Message\OutgoingExternal;
 
-use App\Message\OutgoingKafkaMessageInterface;
+use App\Message\OutgoingMessageInterface;
 use App\MessengerIntegration\Message\Attribute\AsIntegrationMessage;
+use App\MessengerIntegration\Message\Attribute\AsKafkaOutgoingMessage;
 
 #[AsIntegrationMessage(schemaId: 'mm.my.download_requested')]
-class DownloadRequested implements OutgoingKafkaMessageInterface
+#[AsKafkaOutgoingMessage()]
+class DownloadRequested implements OutgoingMessageInterface
 {
     public function __construct(
         public readonly string $stamp,

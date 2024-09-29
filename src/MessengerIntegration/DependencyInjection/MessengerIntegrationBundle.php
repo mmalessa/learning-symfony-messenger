@@ -6,6 +6,7 @@ namespace App\MessengerIntegration\DependencyInjection;
 
 use App\MessengerIntegration\Message\Attribute\AsHttpOutgoingMessage;
 use App\MessengerIntegration\Message\Attribute\AsIntegrationMessage;
+use App\MessengerIntegration\Message\Attribute\AsKafkaOutgoingMessage;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -26,6 +27,13 @@ class MessengerIntegrationBundle extends AbstractBundle
             AsHttpOutgoingMessage::class,
             function (ChildDefinition $definition) {
                 $definition->addTag('messenger.integration.http_message');
+            }
+        );
+
+        $builder->registerAttributeForAutoconfiguration(
+            AsKafkaOutgoingMessage::class,
+            function (ChildDefinition $definition) {
+                $definition->addTag('messenger.integration.kafka_message');
             }
         );
     }

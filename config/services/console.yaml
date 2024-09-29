@@ -5,3 +5,5 @@ services:
         bind:
             $controllerEmulator: '@App\Http\FakeController'
             $schemaIdMapper: '@App\MessengerIntegration\Message\SchemaIdMapperInterface'
+            $httpMessageMapper: '@App\MessengerIntegration\Message\HttpMessageMapperInterface'
+            $kafkaMessageMapper: '@App\MessengerIntegration\Message\KafkaMessageMapperInterface'

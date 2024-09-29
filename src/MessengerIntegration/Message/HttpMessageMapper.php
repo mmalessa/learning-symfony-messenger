@@ -12,6 +12,7 @@ class HttpMessageMapper implements HttpMessageMapperInterface
     }
 
     private array $messages = [];
+
     public function register(string $className, array $attributes): void
     {
         // TODO - add unique validation

@@ -2,7 +2,7 @@
 
 namespace App\MessengerIntegration\Middleware;
 
-use App\Message\OutgoingKafkaMessageInterface;
+use App\MessengerIntegration\Message\KafkaMessageMapperInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
@@ -14,27 +14,25 @@ class OutgoingKafkaRouterMiddleware implements MiddlewareInterface
     public function __construct(
         private readonly LoggerInterface    $logger,
         private readonly TransportInterface $kafkaTransport,
+        private readonly KafkaMessageMapperInterface $kafkaMessageMapper,
     ) {
     }
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        $this->logger->debug(sprintf("*** Outgoing Kafka Router Middleware *** %s", get_class($envelope->getMessage())));
-//        print_r(array_keys($envelope->all()));
+        $message = $envelope->getMessage();
+        $messageClassName = get_class($message);
 
         if (!$this->isOutgoingKafkaMessage($envelope)) {
-            $this->logger->debug("SKIP Outgoing Kafka Router Middleware");
             return $stack->next()->handle($envelope, $stack);
         }
-        $this->logger->debug("PROCESS Outgoing Kafka Router Middleware");
+        $this->logger->debug("PROCESS Outgoing Kafka Router Middleware", ['message' => $messageClassName]);
         return $this->kafkaTransport->send($envelope);
     }
 
     private function isOutgoingKafkaMessage(Envelope $envelope): bool
     {
         $message = $envelope->getMessage();
-        if ($message instanceof OutgoingKafkaMessageInterface) {
-            return true;
-        }
-        return false;
+        $messageClassName = get_class($message);
+        return $this->kafkaMessageMapper->match($messageClassName);
     }
 }

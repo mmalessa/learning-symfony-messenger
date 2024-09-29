@@ -18,6 +18,7 @@ class MessengerIntegrationPass implements CompilerPassInterface
     {
         $this->registerSchemaIdsMessages($container);
         $this->registerHttpMessages($container);
+        $this->registerKafkaMessages($container);
     }
     private function getAttributesByClassName(string $className, string $attributeClass): array
     {
@@ -61,6 +62,22 @@ class MessengerIntegrationPass implements CompilerPassInterface
         foreach ($taggedServices as $className => $tagAttributes) {
             $attributes = $this->getAttributesByClassName($className, AsHttpOutgoingMessage::class);
             $mapper->addMethodCall('register', [$className, $attributes]);
+        }
+    }
+
+    private function registerKafkaMessages(ContainerBuilder $container): void
+    {
+        $mapperServices = $container->findTaggedServiceIds('messenger.integration.kafka_message_mapper');
+        $mapperServicesCount = count($mapperServices);
+        if (1 !== $mapperServicesCount) {
+            throw new \Exception(sprintf("KafkaMessageMapper has defined %d service(s), should be exactly 1", $mapperServicesCount));
+        }
+        $mapperServiceId = array_keys($mapperServices)[0];
+        $mapper = $container->getDefinition($mapperServiceId);
+
+        $taggedServices = $container->findTaggedServiceIds('messenger.integration.kafka_message');
+        foreach ($taggedServices as $className => $tagAttributes) {
+            $mapper->addMethodCall('register', [$className]);
         }
     }
 }

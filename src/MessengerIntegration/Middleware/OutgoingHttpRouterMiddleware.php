@@ -23,12 +23,10 @@ class OutgoingHttpRouterMiddleware implements MiddlewareInterface
         $messageClassName = get_class($envelope->getMessage());
         $targetUrl = $this->httpMessageMapper->getUrlByClassName($messageClassName);
 
-        $this->logger->debug("OutgointHttpRouter", ['targetUrl' => $targetUrl]);
-
         if (null === $targetUrl) {
             return $stack->next()->handle($envelope, $stack);
         }
-        $this->logger->debug("PROCESS Outgoing HTTP Router Middleware");
+        $this->logger->debug("PROCESS Outgoing HTTP Router Middleware", ['message' => $messageClassName]);
 
         return $this->httpTransport->send($envelope->with(new TargetUrlStamp($targetUrl)));
     }

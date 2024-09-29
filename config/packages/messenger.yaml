@@ -52,6 +52,13 @@ framework:
                 serializer: 'messenger.default_serializer'
 
             kafka_publisher_transport:
-                dsn: 'integration-kafka://'
-                serializer: 'messenger.default_serializer'
+                dsn: 'integration-kafka://%env(APP_KAFKA_BOOTSTRAP_SERVERS)%'
+                serializer: 'App\MessengerIntegration\Serializer\IntegrationSerializer'
+                options:
+                    flushTimeout: 5000
+                    flushRetries: 3
+                    role: 'sender'
+                    topic:
+                        name: 'mm.my.integration_events'
+
 
