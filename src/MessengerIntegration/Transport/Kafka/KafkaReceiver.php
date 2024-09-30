@@ -46,7 +46,7 @@ class KafkaReceiver implements ReceiverInterface
                     'timestamp' => $message->timestamp,
                 ]);
 
-                return [$envelope];
+                return [$envelope->with(new KafkaMessageStamp($message))];
             case RD_KAFKA_RESP_ERR__PARTITION_EOF:
                 $this->logger->info('Kafka: Partition EOF reached. Waiting for next message ...');
                 break;
@@ -66,7 +66,9 @@ class KafkaReceiver implements ReceiverInterface
     public function ack(Envelope $envelope): void
     {
         $consumer = $this->getConsumer();
-        $message = $envelope->getMessage();
+
+        $transportStamp = $envelope->last(KafkaMessageStamp::class);
+        $message = $transportStamp->getMessage();
 
         if ($this->properties->commitAsync) {
             $consumer->commitAsync($message);

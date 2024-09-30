@@ -26,7 +26,17 @@ class OutgoingKafkaRouterMiddleware implements MiddlewareInterface
             return $stack->next()->handle($envelope, $stack);
         }
         $this->logger->debug("PROCESS Outgoing Kafka Router Middleware", ['message' => $messageClassName]);
-        return $this->kafkaTransport->send($envelope);
+
+        try {
+            $result = $this->kafkaTransport->send($envelope);
+        } catch (\Throwable $exception) {
+            $this->logger->error($exception->getMessage());
+            while (true) {
+                sleep(10);
+            }
+        }
+
+        return $result;
     }
 
     private function isOutgoingKafkaMessage(Envelope $envelope): bool

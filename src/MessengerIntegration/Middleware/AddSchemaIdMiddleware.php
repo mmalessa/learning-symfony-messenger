@@ -23,13 +23,12 @@ class AddSchemaIdMiddleware implements MiddlewareInterface
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         $message = $envelope->getMessage();
+        $messageClassName = get_class($message);
 
+        $this->logger->debug("SchemaIdStamp", ['className' => $messageClassName]);
         if (!$message instanceof IntegrationMessageInterface) {
             return $stack->next()->handle($envelope, $stack);
         }
-
-        $message = $envelope->getMessage();
-        $messageClassName = get_class($message);
 
         $this->logger->debug("Add SchemaIdStamp", ['className' => $messageClassName]);
 

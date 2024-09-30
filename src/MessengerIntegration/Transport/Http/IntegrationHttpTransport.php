@@ -15,8 +15,7 @@ use Symfony\Component\Messenger\Transport\SetupableTransportInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 
 
-// TODO
-class IntegrationHttpSenderTransport implements TransportInterface, SetupableTransportInterface, MessageCountAwareInterface
+class IntegrationHttpTransport implements TransportInterface, SetupableTransportInterface, MessageCountAwareInterface
 {
     public function __construct(
         private SerializerInterface     $serializer,

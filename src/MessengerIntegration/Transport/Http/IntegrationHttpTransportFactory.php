@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 
-class IntegrationHttpTransportSenderFactory
+class IntegrationHttpTransportFactory
 {
     public function __construct(
         private readonly SchemaIdMapperInterface    $schemaIdMapper,
@@ -27,7 +27,7 @@ class IntegrationHttpTransportSenderFactory
     {
         unset($options['transport_name']);
 
-        return new IntegrationHttpSenderTransport(
+        return new IntegrationHttpTransport(
             $this->serializer,
             $this->schemaIdMapper,
             $this->httpMessageMapper,

@@ -2,10 +2,9 @@
 
 namespace App\MessengerIntegration\Serializer;
 
-use App\Message\IncomingMessageInterface;
 use App\Message\IntegrationMessageInterface;
-use App\Message\OutgoingMessageInterface;
 use App\MessengerIntegration\Message\SchemaIdMapperInterface;
+use App\MessengerIntegration\Message\UnhandledMessage;
 use App\MessengerIntegration\Serializer\Body\BodySerializerInterface;
 use App\MessengerIntegration\Serializer\IntegrationStamps\IntegrationStampsSerializerInterface;
 use App\MessengerIntegration\Serializer\MessengerStamps\MessengerStampsSerializerInterface;
@@ -42,7 +41,9 @@ class IntegrationSerializer implements SerializerInterface
         // HEADERS
         $headers = array_merge(
             $this->messengerStampsSerializer->serialize(
-                $envelope->withoutStampsOfType(ErrorDetailsStamp::class)->all()
+                $envelope
+                    ->withoutStampsOfType(ErrorDetailsStamp::class)
+                    ->all()
             ),
             $this->integrationStampsSerializer->serialize(
                 $envelope->all()
@@ -67,32 +68,38 @@ class IntegrationSerializer implements SerializerInterface
 
     public function decode(array $encodedEnvelope): Envelope
     {
-        $this->logger->info("*** Decode Envelope ***");
-        $body = $encodedEnvelope['body'];
-        $headers = $encodedEnvelope['headers'];
-        $kafkaMessageKey = $encodedEnvelope['key'] ?? null;
+        try {
+            $this->logger->info("*** Decode Envelope ***");
+            $body = $encodedEnvelope['body'];
+            $headers = $encodedEnvelope['headers'];
+            $kafkaMessageKey = $encodedEnvelope['key'] ?? null;
 
-        // SCHEMA ID
-        $schemaId = $this->integrationStampsSerializer->getSchemaIdFromHeaders($headers);
-        if (null === $schemaId) {
-            throw new \RuntimeException('SchemaId cannot be null');
+            // SCHEMA ID
+            $schemaId = $this->integrationStampsSerializer->getSchemaIdFromHeaders($headers);
+            if (null === $schemaId) {
+                throw new \RuntimeException('SchemaId cannot be null');
+            }
+            $className = $this->schemaIdMapper->getClassNameBySchemaId($schemaId);
+
+            // MESSAGE BODY
+            $message = $this->bodySerializer->deserialize($body, $className);
+
+            // STAMPS
+            $stamps = array_merge(
+                $this->messengerStampsSerializer->deserialize($headers ?? []),
+                $this->integrationStampsSerializer->deserialize($headers ?? []),
+            );
+
+            // SOMETIMES ADD KAFKA MESSAGE KEY STAMP
+            if (null !== $kafkaMessageKey) {
+                $stamps[] = new KafkaMessageKeyStamp($kafkaMessageKey);
+            }
+
+            return new Envelope($message, $stamps);
+        } catch (\Throwable $throwable) {
+            $message = new UnhandledMessage($body, $headers, $throwable->getMessage());
+            return Envelope::wrap($message);
         }
-        $className = $this->schemaIdMapper->getClassNameBySchemaId($schemaId);
 
-        // MESSAGE BODY
-        $message = $this->bodySerializer->deserialize($body, $className);
-
-        // STAMPS
-        $stamps = array_merge(
-            $this->messengerStampsSerializer->deserialize($headers ?? []),
-            $this->integrationStampsSerializer->deserialize($headers ?? []),
-        );
-
-        // SOMETIMES ADD KAFKA MESSAGE KEY STAMP
-        if (null !== $kafkaMessageKey) {
-            $stamps[] = new KafkaMessageKeyStamp($kafkaMessageKey);
-        }
-
-        return new Envelope($message, $stamps);
     }
 }

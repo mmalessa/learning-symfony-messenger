@@ -60,6 +60,11 @@ services:
             - { name: 'messenger.integration.kafka_message_mapper' }
 
     # Middleware
+    App\MessengerIntegration\Middleware\NullTransportRouterMiddleware:
+        arguments:
+            $logger: '@monolog.logger.integration'
+            $nullTransport: '@messenger.transport.null_transport'
+
     App\MessengerIntegration\Middleware\AddSchemaIdMiddleware:
         arguments:
             $logger: '@monolog.logger.integration'
@@ -88,7 +93,7 @@ services:
             $kafkaMessageMapper: '@App\MessengerIntegration\Message\KafkaMessageMapperInterface'
 
     # Transport factories
-    App\MessengerIntegration\Transport\Http\IntegrationHttpTransportSenderFactory:
+    App\MessengerIntegration\Transport\Http\IntegrationHttpTransportFactory:
         arguments:
             $schemaIdMapper: '@App\MessengerIntegration\Message\SchemaIdMapperInterface'
             $httpMessageMapper: '@App\MessengerIntegration\Message\HttpMessageMapperInterface'
@@ -105,6 +110,11 @@ services:
             $kafkaFactory: '@App\MessengerIntegration\Transport\Kafka\RdKafkaFactory'
             $logger: '@monolog.logger.application'
 
+    App\MessengerIntegration\Transport\Null\NullTransportFactory:
+        tags:
+            - { name: 'messenger.transport_factory' }
+        arguments:
+            $logger: '@monolog.logger.application'
 
     # Other
     App\MessengerIntegration\Transport\Http\HttpClientFactory:

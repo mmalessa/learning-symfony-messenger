@@ -4,6 +4,7 @@ framework:
         buses:
             application_bus:
                 middleware:
+                    - 'App\MessengerIntegration\Middleware\NullTransportRouterMiddleware'
                     - 'App\MessengerIntegration\Middleware\AddSchemaIdMiddleware'
                     - 'App\MessengerIntegration\Middleware\InboxRouterMiddleware'
                     - 'App\MessengerIntegration\Middleware\OutboxRouterMiddleware'
@@ -15,6 +16,9 @@ framework:
         failure_transport: failed_transport
 
         transports:
+
+            null_transport:
+                dsn: 'null://'
 
             failed_transport:
                 dsn: 'doctrine://application'
@@ -61,4 +65,20 @@ framework:
                     topic:
                         name: 'mm.my.integration_events'
 
+            kafka_receiver_transport:
+                dsn: 'integration-kafka://%env(APP_KAFKA_BOOTSTRAP_SERVERS)%'
+                serializer: 'App\MessengerIntegration\Serializer\IntegrationSerializer'
+                options:
+                    commitAssync: 'false'
+                    receiveTimeout: 60000
+                    role: 'receiver'
+                    topic:
+                        name: 'mm.ext.integration_events'
+                    kafka_conf:
+                        'group.id': 'mm.my.my_group_id'
+                        'heartbeat.interval.ms': '1000'
+                        'enable.auto.commit': 'false'
+                        'enable.auto.offset.store': 'false'
+                    topic_conf:
+                        'auto.offset.reset': 'earliest'
 
