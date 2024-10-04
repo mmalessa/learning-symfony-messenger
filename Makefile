@@ -25,3 +25,16 @@ down: ## Stop and remove containers
 .PHONY: shell
 shell: ## Shell in php container
 	@$(DC) exec -it php bash
+
+.PHONY: dev-push-image
+dev-push-image:
+	@docker tag learning-symfony-messenger-php registry.localhost:5000/learning-symfony-messenger-php:latest
+	@docker push registry.localhost:5000/learning-symfony-messenger-php:latest
+
+.PHONY: k9s-dev-apply
+k9s-dev-apply:
+	kubectl apply -f .kubernetes/dev-php.yaml
+
+.PHONY: k9s-dev-delete
+k9s-dev-delete:
+	kubectl delete -f .kubernetes/dev-php.yaml
