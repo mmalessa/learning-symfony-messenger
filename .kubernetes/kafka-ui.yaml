@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: kafka-ui-config
+    labels:
+        app: kafka-ui
+data:
+    dynamic_config.yaml: |
+        auth:
+            type: DISABLED
+        kafka:
+            clusters:
+                - bootstrapServers: kafka:9092
+                  name: local
+                  properties: {}
+                  readOnly: false
+        rbac:
+            roles: []
+        webclient: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: kafka-ui
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: kafka-ui
+    template:
+        metadata:
+            labels:
+                app: kafka-ui
+        spec:
+            containers:
+                - name: kafka-ui
+                  image: provectuslabs/kafka-ui:latest
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                      - containerPort: 8080
+                  volumeMounts:
+                      - name: kafka-ui-config
+                        mountPath: /etc/kafkaui/
+                  env:
+                      - name: DYNAMIC_CONFIG_ENABLED
+                        value: 'true'
+            volumes:
+                - name: kafka-ui-config
+                  configMap:
+                      name: kafka-ui-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: kafka-ui
+    labels:
+        app: kafka-ui
+spec:
+    type: NodePort
+    ports:
+        - port: 80
+          targetPort: 8080
+    selector:
+        app: kafka-ui
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: kafka-ui-ingress
+    annotations:
+        ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+    rules:
+        - host: kafka-ui.localhost
+          http:
+              paths:
+                  - pathType: Prefix
+                    path: "/"
+                    backend:
+                        service:
+                            name: kafka-ui
+                            port:
+                                number: 80

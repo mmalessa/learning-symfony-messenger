@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: composer-job
+spec:
+    template:
+        spec:
+            containers:
+                - name: composer-job
+                  image: registry.localhost:5000/learning-symfony-messenger-php:latest
+                  workingDir: /app
+                  command: ["composer", "install"]
+                  envFrom:
+                      - configMapRef:
+                            name: application-env
+                  volumeMounts:
+                      - name: php-source
+                        mountPath: /app
+            volumes:
+                -   name: php-source
+                    hostPath:
+                        path: /mnt/projects/learning-symfony-messenger
+                        type: Directory
+            restartPolicy: Never
+    backoffLimit: 1

@@ -25,12 +25,12 @@ class SomeProcessHandler
     {
         $this->logger->debug(sprintf("Handle StartProcess with content: %s", $message->messageContent));
 
-//        $this->messageBus->dispatch(
-//            new DownloadData('Bring a Christmas tree'),
-//            [
-//                new MessageIdStamp(Uuid::uuid7()->toString()),
-//            ],
-//        );
+        $this->messageBus->dispatch(
+            new DownloadData('Bring a Christmas tree'),
+            [
+                new MessageIdStamp(Uuid::uuid7()->toString()),
+            ],
+        );
 
         $this->messageBus->dispatch(
             new DownloadRequested((new \DateTimeImmutable())->format(DATE_ATOM)),

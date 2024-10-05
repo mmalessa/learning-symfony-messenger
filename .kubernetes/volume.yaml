@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: php-source-pv
+spec:
+  capacity:
+    storage: 1Gi  # to adjust
+  accessModes:
+    - ReadWriteMany  # allow access from many pods
+  hostPath:
+    path: /mnt/projects/learning-symfony-messenger
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: php-source-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi  # equal or smaller than PV

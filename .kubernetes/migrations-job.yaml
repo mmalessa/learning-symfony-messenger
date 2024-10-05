@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: migrations-job
+spec:
+    template:
+        spec:
+            containers:
+                - name: migrations-job
+                  image: registry.localhost:5000/learning-symfony-messenger-php:latest
+                  workingDir: /app
+#                  command: ["./bin/console", "doctrine:migrations:migrate", "-n"]
+                  command:
+                      - /bin/sh
+                      - -c
+                      - |
+                          echo "Waiting for PostgreSQL..."
+                          until pg_isready -h postgres -p 5432; do
+                            sleep 2
+                          done
+                          echo "PostgreSQL is ready. Run migrations..."
+                          sleep 10
+                          ./bin/console doctrine:migrations:migrate -n
+                  envFrom:
+                      - configMapRef:
+                            name: application-env
+                  volumeMounts:
+                      - name: php-source
+                        mountPath: /app
+            volumes:
+                -   name: php-source
+                    hostPath:
+                        path: /mnt/projects/learning-symfony-messenger
+                        type: Directory
+            restartPolicy: Never
+    backoffLimit: 1

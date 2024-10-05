@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-shell
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: app-shell
+    template:
+        metadata:
+            labels:
+                app: app-shell
+        spec:
+            containers:
+                - name: php-shell
+                  image: registry.localhost:5000/learning-symfony-messenger-php:latest
+                  workingDir: /app
+                  command: ["tail", "-f", "/dev/null"]
+                  envFrom:
+                      - configMapRef:
+                            name: application-env
+                  volumeMounts:
+                      - name: php-source
+                        mountPath: /app
+            volumes:
+                -   name: php-source
+                    hostPath:
+                        path: /mnt/projects/learning-symfony-messenger
+                        type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-inbox-consumer
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: app-inbox-consumer
+    template:
+        metadata:
+            labels:
+                app: app-inbox-consumer
+        spec:
+            containers:
+                - name: php-shell
+                  image: registry.localhost:5000/learning-symfony-messenger-php:latest
+                  workingDir: /app
+                  command: ["./bin/console", "messenger:consume", "-vv", "inbox_transport"]
+                  envFrom:
+                      - configMapRef:
+                            name: application-env
+                  volumeMounts:
+                      - name: php-source
+                        mountPath: /app
+            volumes:
+                -   name: php-source
+                    hostPath:
+                        path: /mnt/projects/learning-symfony-messenger
+                        type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-outbox-consumer
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: app-outbox-consumer
+    template:
+        metadata:
+            labels:
+                app: app-outbox-consumer
+        spec:
+            containers:
+                - name: php-shell
+                  image: registry.localhost:5000/learning-symfony-messenger-php:latest
+                  workingDir: /app
+                  command: ["./bin/console", "messenger:consume", "-vv", "outbox_transport"]
+                  envFrom:
+                      - configMapRef:
+                            name: application-env
+                  volumeMounts:
+                      - name: php-source
+                        mountPath: /app
+            volumes:
+                -   name: php-source
+                    hostPath:
+                        path: /mnt/projects/learning-symfony-messenger
+                        type: Directory

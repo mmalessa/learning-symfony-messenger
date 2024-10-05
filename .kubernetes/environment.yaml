@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: application-env
+    labels:
+        app: application
+data:
+    APP_ENV: "dev"
+    APP_DATABASE_URL: "postgresql://demo:demo@postgres/demo?serverVersion=16&charset=utf8"
+    APP_AMQP_DSN: "integration-amqp://demo:demo@rabbitmq:5672/"
+    APP_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+    APP_KAFKA_CONSUMER_GROUP_ID: "myapp_1"

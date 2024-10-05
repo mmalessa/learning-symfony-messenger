@@ -2,7 +2,7 @@
 FROM php:8.3.11-cli-alpine3.20 AS local
 # base
 RUN apk --no-cache add unzip tzdata librdkafka\
-    $PHPIZE_DEPS linux-headers htop procps bash vim\
+    $PHPIZE_DEPS linux-headers htop procps postgresql16-client bash vim\
     && rm -rf /var/cache/apk/*
 ENV TZ=UTC
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/

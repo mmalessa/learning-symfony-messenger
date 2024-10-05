@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: external-api
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: external-api
+    template:
+        metadata:
+            labels:
+                app: external-api
+        spec:
+            containers:
+                - name: http-server
+                  image: registry.localhost:5000/learning-symfony-messenger-php:latest
+                  workingDir: /app
+                  command: ["./bin/dummy-http", "first_instance"]
+                  envFrom:
+                      - configMapRef:
+                            name: application-env
+                  volumeMounts:
+                      - name: php-source
+                        mountPath: /app
+            volumes:
+                -   name: php-source
+                    hostPath:
+                        path: /mnt/projects/learning-symfony-messenger
+                        type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: external-api
+    labels:
+        app: external-api
+spec:
+    type: NodePort
+    ports:
+        - port: 80
+    selector:
+        app: external-api

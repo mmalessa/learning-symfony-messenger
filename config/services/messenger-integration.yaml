@@ -47,7 +47,7 @@ services:
     App\MessengerIntegration\Message\HttpMessageMapper:
         arguments:
             $prefixMap: # TODO - do it better
-                'some_system': 'http://go_dummy_http_app'
+                'some_system': 'http://external-api'
                 'some_other': 'http://someother.local'
         tags:
             - { name: 'messenger.integration.http_message_mapper' }
