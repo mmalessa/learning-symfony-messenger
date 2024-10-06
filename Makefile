@@ -38,17 +38,17 @@ dev-push-image: ## Push image to registry.local
 k9s-init: ## Init app environment in Kubernetes
 	kubectl apply -f .kubernetes/environment.yaml
 	kubectl apply -f .kubernetes/postgres.yaml
-	kubectl wait --for=condition=available --timeout=30s deployment/postgres
 	kubectl apply -f .kubernetes/kafka.yaml
-	kubectl wait --for=condition=available --timeout=30s deployment/kafka
 	kubectl apply -f .kubernetes/kafka-ui.yaml
-	kubectl wait --for=condition=available --timeout=30s deployment/kafka-ui
 	kubectl apply -f .kubernetes/external-api.yaml
-	kubectl wait --for=condition=available --timeout=30s deployment/external-api
+	kubectl wait --for=condition=available --timeout=180s deployment/postgres
+	kubectl wait --for=condition=available --timeout=180s deployment/kafka
+	kubectl wait --for=condition=available --timeout=180s deployment/kafka-ui
+	kubectl wait --for=condition=available --timeout=180s deployment/external-api
 	kubectl apply -f .kubernetes/composer-job.yaml
-	kubectl wait --for=condition=complete --timeout=30s job/composer-job
+	kubectl wait --for=condition=complete --timeout=180s job/composer-job
 	kubectl apply -f .kubernetes/migrations-job.yaml
-	kubectl wait --for=condition=complete --timeout=30s job/migrations-job
+	kubectl wait --for=condition=complete --timeout=180s job/migrations-job
 
 .PHONY: k9s-purge
 k9s-purge: ## Purge app environment in Kubernetes

@@ -19,5 +19,8 @@ http://kafka-ui.localhost
 
 ```shell
 kubectl logs -f <pod_name>
+kubectl logs -f app=external-api
+kubectl logs -f app=app-inbox-consumer
+kubectl logs -f app=app-outbox-consumer
 kubectl exec --stdin --tty <pod_name> -- sh
 ```
